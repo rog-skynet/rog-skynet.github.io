@@ -12,6 +12,23 @@
 <!-- LB -->
 
 <item>
+<title>Datasett fra Stavanger kommune</title>
+<guid>https://kaggle.no/index.html#datasett-fra-stavanger-kommune</guid>
+<pubDate>Wed, 23 Oct 2024 15:27:16 +0200</pubDate>
+<description><![CDATA[
+<p>Stavanger kommune legger ut åpne datasett <a href="https://opencom.no/">her</a>. Mye spennende data om folkehelse, inntekt, levekår, &amp;c.</p>
+<ul>
+<li>Helseprofil: https://www.fhi.no/he/folkehelse/folkehelseprofil/</li>
+<li>Luftkvalitet: https://opencom.no/dataset/luftkvalitetsprognose-stavanger</li>
+<li>Levekår: https://www.stavanger.kommune.no/om-stavanger-kommune/stavanger-statistikken/levekarsdata/ | https://www.stavanger.kommune.no/om-stavanger-kommune/stavanger-statistikken/Levekaar-i-Stavanger/#last-ned-tidligere-unders-kelser</li>
+<li>Rutedata fra Kolumbus: https://opencom.no/dataset/rutedata-fra-kolumbus</li>
+<li>Demografi Stavanger: https://opencom.no/dataset/folkeregisterdata-stavanger-total-antall-innbyggere</li>
+</ul>
+]]></description>
+</item>
+
+
+<item>
 <title>Brukerundersøkelse</title>
 <guid>https://kaggle.no/index.html#brukerundersokelse</guid>
 <pubDate>Wed, 23 Oct 2024 13:24:18 +0200</pubDate>
