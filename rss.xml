@@ -12,6 +12,16 @@
 <!-- LB -->
 
 <item>
+<title>URL til dagens meny i kantinen</title>
+<guid>https://kaggle.no/index.html#url-til-dagens-meny-i-kantinen</guid>
+<pubDate>Wed, 23 Oct 2024 16:14:05 +0200</pubDate>
+<description><![CDATA[
+<p>Dagens meny kan leses programmatisk <a href="https://i74qu6dp3m.execute-api.us-east-2.amazonaws.com/">her</a>.</p>
+]]></description>
+</item>
+
+
+<item>
 <title>Datasett fra Stavanger kommune</title>
 <guid>https://kaggle.no/index.html#datasett-fra-stavanger-kommune</guid>
 <pubDate>Wed, 23 Oct 2024 15:27:16 +0200</pubDate>
