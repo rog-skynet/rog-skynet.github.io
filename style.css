@@ -1,40 +1,82 @@
 body {
-	margin: 0;
-	font-family: sans-serif;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
+  margin: 0;
+  font-family: sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
-	display: flex;
-	min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
 
 .entry {
-	border-left: 10px solid darkgray;
-	padding: 4px 10px 10px 10px;
-	border-radius: 10px 10px 10px 10px;
-	margin-bottom: 20px;
-	background-color: #eee;
-	}
+  border-left: 10px solid darkgray;
+  padding: 4px 10px 10px 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  background-color: #eee;
+}
 
-.entry h2 { margin: 5px auto 2px auto; }
+.entry h2 {
+  margin: 5px auto 2px auto;
+}
 
 #blog-section {
-	flex: 4;
-	background-color: #00263e;
-	padding: 20px;
+  flex: 4;
+  background-color: #00263e;
+  padding: 20px;
 }
 
 #right-section {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	background-color: lightgray;
-	padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: lightgray;
+  padding: 20px;
+  transition: transform 0.3s ease;
 }
 
-#github-section, #links-section {
-	padding: 0px 0px 5px 0px;
+/* Hide hamburger menu and adjust right-section on desktop */
+.hamburger-menu {
+  display: none;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  /* Display the hamburger menu only on mobile */
+  .hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 11;
+    color: white;
+    background-color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  /* Hide right-section by default on mobile */
+  #right-section {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background-color: lightgray;
+    color: black;
+    text-align: center;
+    padding-top: 50px;
+    z-index: 10;
+  }
+
+  /* Show right-section when toggled */
+  #right-section.show {
+    display: flex;
+  }
 }
