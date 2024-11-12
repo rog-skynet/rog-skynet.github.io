@@ -1,49 +1,37 @@
 <?php
-// Allow Cross-Origin Requests (for AJAX)
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$response = ["status" => "error", "message" => "Submission failed. Please try again."];
+$log_file = '/var/www/kaggle/submit_handle_log.txt';
 
-if (isset($_POST['name'], $_POST['git_handle'], $_POST['kaggle_handle'])) {
-    $name = $_POST['name'];
-    $git_handle = $_POST['git_handle'];
-    $kaggle_handle = $_POST['kaggle_handle'];
+try {
+    $database = new SQLite3('/var/www/kaggle/handles.db');
+    file_put_contents($log_file, "Database opened successfully\n", FILE_APPEND);
 
-    // Connect to the SQLite database
-    $db = new SQLite3('/var/www/kaggle/handles.db');
+    $name = $_POST['name'] ?? '';
+    $git_handle = $_POST['git_handle'] ?? '';
+    $kaggle_handle = $_POST['kaggle_handle'] ?? '';
 
-    if (!$db) {
-        $response['message'] = "Database connection failed: " . $db->lastErrorMsg();
-        echo json_encode($response);
+    if (!$name || !$git_handle || !$kaggle_handle) {
+        file_put_contents($log_file, "Missing data: name=$name, git_handle=$git_handle, kaggle_handle=$kaggle_handle\n", FILE_APPEND);
+        echo json_encode(['success' => false]);
         exit;
     }
 
-    // Prepare the SQL statement
-    $stmt = $db->prepare("INSERT INTO handles (name, git_handle, kaggle_handle) VALUES (:name, :git_handle, :kaggle_handle)");
-    if (!$stmt) {
-        $response['message'] = "Failed to prepare statement: " . $db->lastErrorMsg();
-        echo json_encode($response);
-        exit;
-    }
-
-    // Bind parameters
+    $stmt = $database->prepare("INSERT INTO handles (name, git_handle, kaggle_handle) VALUES (:name, :git_handle, :kaggle_handle)");
     $stmt->bindValue(':name', $name, SQLITE3_TEXT);
     $stmt->bindValue(':git_handle', $git_handle, SQLITE3_TEXT);
     $stmt->bindValue(':kaggle_handle', $kaggle_handle, SQLITE3_TEXT);
 
-    // Execute the statement and check for success
-    $result = $stmt->execute();
-    if ($result) {
-        $response['status'] = "success";
-        $response['message'] = "Submission successful!";
+    if ($stmt->execute()) {
+        file_put_contents($log_file, "Inserted: $name, $git_handle, $kaggle_handle\n", FILE_APPEND);
+        echo json_encode(['success' => true]);
     } else {
-        $response['message'] = "Database write failed: " . $db->lastErrorMsg();
+        file_put_contents($log_file, "Failed to insert\n", FILE_APPEND);
+        echo json_encode(['success' => false]);
     }
-
-    // Close the database connection
-    $db->close();
+} catch (Exception $e) {
+    file_put_contents($log_file, "Exception: " . $e->getMessage() . "\n", FILE_APPEND);
+    echo json_encode(['success' => false]);
 }
-
-// Return the JSON response
-echo json_encode($response);
+?>
