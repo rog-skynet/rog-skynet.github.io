@@ -70,7 +70,7 @@
         <li><a href="https://www.kaggle.com/organizations/rog-skynet">Skynet på Kaggle</a></li>
         <li><a href="https://github.com/orgs/rog-skynet/">Skynet på GitHub</a></li>
         <li><a href="https://colab.research.google.com">Google Colab</a></li>
-        <li><a href="#" onclick="openModal()">Submit Git/Kaggle Handles</a></li>
+        <li><a href="#" onclick="openModal()">Meld deg på kaggle</a></li>
       </ul>
     </div>
   </div>
@@ -79,22 +79,22 @@
 <div id="handle-modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
-    <h2>Submit Your Handles</h2>
+    <h2>Send inn navn og handle</h2>
     <form id="handle-form" onsubmit="submitForm(event)">
       <div class="form-group">
-        <label for="real-name">Real Name:</label>
+        <label for="real-name">Navn:</label>
         <input type="text" id="real-name" name="real-name" required>
       </div>
       <div class="form-group">
-        <label for="git-handle">Git Handle:</label>
+        <label for="git-handle">Git-handle:</label>
         <input type="text" id="git-handle" name="git-handle" required>
       </div>
       <div class="form-group">
-        <label for="kaggle-handle">Kaggle Handle:</label>
+        <label for="kaggle-handle">Kaggle-handle:</label>
         <input type="text" id="kaggle-handle" name="kaggle-handle" required>
       </div>
-      <button type="submit">Submit</button>
-      <div id="feedback" style="margin-top: 10px; color: green; display: none;">Submission successful!</div>
+      <button type="submit">Send</button>
+      <div id="feedback" style="margin-top: 10px; color: green; display: none;">Vellykket!</div>
     </form>
   </div>
 </div>
@@ -126,14 +126,14 @@
       if (data.success) {
         // Show success feedback
         document.getElementById('feedback').style.display = 'block';
-        document.getElementById('feedback').textContent = 'Submission successful!';
+        document.getElementById('feedback').textContent = 'Vellykket!';
         
         // Clear the form fields
         document.getElementById('handle-form').reset();
       } else {
         // Show error feedback
         document.getElementById('feedback').style.display = 'block';
-        document.getElementById('feedback').textContent = 'Submission failed. Please try again.';
+        document.getElementById('feedback').textContent = 'Innsending feilet, vennligst prøv igjen.';
       }
     })
     .catch(error => {
