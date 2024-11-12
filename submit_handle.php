@@ -9,10 +9,10 @@ try {
     $database = new SQLite3('/var/www/kaggle/handles.db');
     file_put_contents($log_file, "Database opened successfully\n", FILE_APPEND);
 
-    // Sanitize and capture POST variables with null coalescing operator
-    $name = $_POST['name'] ?? '';
-    $git_handle = $_POST['git_handle'] ?? '';
-    $kaggle_handle = $_POST['kaggle_handle'] ?? '';
+    // Sanitize and capture POST variables with correct keys
+    $name = $_POST['name'] ?? '';         // Adjusted to 'real-name'
+    $git_handle = $_POST['git-handle'] ?? '';  // Adjusted to 'git-handle'
+    $kaggle_handle = $_POST['kaggle-handle'] ?? ''; // Adjusted to 'kaggle-handle'
 
     // Check if any field is missing
     if (!$name || !$git_handle || !$kaggle_handle) {
@@ -38,4 +38,3 @@ try {
     file_put_contents($log_file, "Exception: " . $e->getMessage() . "\n", FILE_APPEND);
     echo json_encode(['success' => false, 'message' => 'Internal server error.']);
 }
-?>
