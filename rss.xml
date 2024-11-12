@@ -12,6 +12,16 @@
 <!-- LB -->
 
 <item>
+<title>Kaggle-konkurransen er live!</title>
+<guid>https://kaggle.no/index.html#kagglekonkurransen-er-live</guid>
+<pubDate>Tue, 12 Nov 2024 20:07:18 +0100</pubDate>
+<description><![CDATA[
+<p>Etter mandagens lunch &amp; learn er vi klare til å gå i gang. Ettersom repoet for notebooken er privat, må deltakerne legge inn git- og kaggle handles for å få tilgang. Legg inn handles <a href="#" onclick="openModal()">her</a>.</p>
+]]></description>
+</item>
+
+
+<item>
 <title>URL til dagens meny i kantinen</title>
 <guid>https://kaggle.no/index.html#url-til-dagens-meny-i-kantinen</guid>
 <pubDate>Wed, 23 Oct 2024 16:14:05 +0200</pubDate>
