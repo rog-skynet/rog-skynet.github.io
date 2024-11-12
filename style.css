@@ -28,7 +28,7 @@ body {
 /* Blog section styling */
 #blog-section {
   flex: 4;
-  background-color: #00263e;
+  background: linear-gradient(to bottom, #00263e, #5d6d7e ); /* Dark blue to light grey */
   padding: 20px;
 }
 
