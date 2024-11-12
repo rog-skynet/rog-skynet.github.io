@@ -1,34 +1,34 @@
 <?php
-// Database file path
-$dbFile = 'handles.db';
+header('Content-Type: application/json');
 
-// Create a new SQLite3 database if it doesn’t exist
-$db = new SQLite3($dbFile);
+$realName = $_POST['real-name'] ?? '';
+$gitHandle = $_POST['git-handle'] ?? '';
+$kaggleHandle = $_POST['kaggle-handle'] ?? '';
 
-// Create table if it doesn’t exist
-$db->exec("CREATE TABLE IF NOT EXISTS handles (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    git_handle TEXT NOT NULL,
-    kaggle_handle TEXT NOT NULL
-)");
+try {
+    // Assume you have a PDO instance called $pdo
+    $pdo = new PDO('sqlite:handles.db');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Prepare and bind parameters to insert user data
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = htmlspecialchars($_POST["name"]);
-    $git_handle = htmlspecialchars($_POST["git_handle"]);
-    $kaggle_handle = htmlspecialchars($_POST["kaggle_handle"]);
+    // Ensure the table exists
+    $pdo->exec("CREATE TABLE IF NOT EXISTS handles (
+        id INTEGER PRIMARY KEY,
+        real_name TEXT,
+        git_handle TEXT,
+        kaggle_handle TEXT
+    )");
 
-    // Prepare and execute insert statement
-    $stmt = $db->prepare("INSERT INTO handles (name, git_handle, kaggle_handle) VALUES (:name, :git_handle, :kaggle_handle)");
-    $stmt->bindValue(':name', $name, SQLITE3_TEXT);
-    $stmt->bindValue(':git_handle', $git_handle, SQLITE3_TEXT);
-    $stmt->bindValue(':kaggle_handle', $kaggle_handle, SQLITE3_TEXT);
+    // Insert the data
+    $stmt = $pdo->prepare("INSERT INTO handles (real_name, git_handle, kaggle_handle) VALUES (:realName, :gitHandle, :kaggleHandle)");
+    $stmt->bindParam(':realName', $realName);
+    $stmt->bindParam(':gitHandle', $gitHandle);
+    $stmt->bindParam(':kaggleHandle', $kaggleHandle);
     $stmt->execute();
 
-    echo "Handles submitted successfully!";
+    // Respond with success
+    echo json_encode(['success' => true]);
+} catch (Exception $e) {
+    // Respond with failure
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
-
-// Close the database connection
-$db->close();
 ?>

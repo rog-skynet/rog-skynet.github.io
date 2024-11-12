@@ -60,11 +60,8 @@
     </ol>
 <small>Wed, 23. Oct 2024 13:13</small>
 </div>
-
-
   </div>
 
-  <!-- Right Sidebar Section -->
   <div id="right-section">
     <div id="links-section">
       <h3>Lenker</h3>
@@ -73,33 +70,80 @@
         <li><a href="https://www.kaggle.com/organizations/rog-skynet">Skynet på Kaggle</a></li>
         <li><a href="https://github.com/orgs/rog-skynet/">Skynet på GitHub</a></li>
         <li><a href="https://colab.research.google.com">Google Colab</a></li>
-        <!-- Button to open modal -->
-        <li><a href="submit_handle.php" onclick="openModal(); return false;">Submit Handles</a></li>
-      </ul>
+        <li><a href="#" onclick="openModal()">Submit Git/Kaggle Handles</a></li>
       </ul>
     </div>
   </div>
 </div>
 
-<!-- Modal Structure -->
-<div id="gitHandleModal" class="modal">
+<div id="handle-modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
     <h2>Submit Your Handles</h2>
-    <form action="submit_handle.php" method="POST">
-      <label for="name">Real Name:</label>
-      <input type="text" id="name" name="name" required><br><br>
-
-      <label for="git_handle">Git Handle:</label>
-      <input type="text" id="git_handle" name="git_handle" required><br><br>
-
-      <label for="kaggle_handle">Kaggle Handle:</label>
-      <input type="text" id="kaggle_handle" name="kaggle_handle" required><br><br>
-
-      <input type="submit" value="Submit">
+    <form id="handle-form" onsubmit="submitForm(event)">
+      <div class="form-group">
+        <label for="real-name">Real Name:</label>
+        <input type="text" id="real-name" name="real-name" required>
+      </div>
+      <div class="form-group">
+        <label for="git-handle">Git Handle:</label>
+        <input type="text" id="git-handle" name="git-handle" required>
+      </div>
+      <div class="form-group">
+        <label for="kaggle-handle">Kaggle Handle:</label>
+        <input type="text" id="kaggle-handle" name="kaggle-handle" required>
+      </div>
+      <button type="submit">Submit</button>
+      <div id="feedback" style="margin-top: 10px; color: green; display: none;">Submission successful!</div>
     </form>
   </div>
 </div>
 
 <script src="menu.js"></script>
-<script src="modal.js"></script>
+<script>
+  function openModal() {
+    document.getElementById('handle-modal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('handle-modal').style.display = 'none';
+    document.getElementById('feedback').style.display = 'none'; // Hide feedback message when closing
+  }
+
+  function submitForm(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Get form data
+    const formData = new FormData(document.getElementById('handle-form'));
+
+    // Send the form data to submit_handle.php via AJAX
+    fetch('submit_handle.php', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.json()) // Parse JSON response
+    .then(data => {
+      if (data.success) {
+        // Show success feedback
+        document.getElementById('feedback').style.display = 'block';
+        document.getElementById('feedback').textContent = 'Submission successful!';
+        
+        // Clear the form fields
+        document.getElementById('handle-form').reset();
+      } else {
+        // Show error feedback
+        document.getElementById('feedback').style.display = 'block';
+        document.getElementById('feedback').textContent = 'Submission failed. Please try again.';
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Show error feedback
+      document.getElementById('feedback').style.display = 'block';
+      document.getElementById('feedback').textContent = 'An error occurred. Please try again.';
+    });
+  }
+</script>
+
+</body>
+</html>
