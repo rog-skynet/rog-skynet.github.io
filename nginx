@@ -1,15 +1,41 @@
 server {
-	listen 80 ;
-	listen [::]:80 ;
 
-	root /var/www/cerex ;
+    root /var/www/kaggle;
+    index index.html index.htm index.nginx-debian.html;
 
-	index index.html index.htm index.nginx-debian.html ;
+    server_name kaggle.no www.kaggle.no;
 
-	server_name cerex.no www.cerex.no ;
+    location / {
+        try_files $uri $uri/ =404;
+    }
 
-	location / {
-		try_files $uri $uri/ =404 ;
-	}
+    location /deploy.php {
+        # Pass PHP scripts to PHP-FPM
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;  # Use this if PHP-FPM uses a socket file
+        include snippets/fastcgi-php.conf;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
 
+    listen [::]:443 ssl ipv6only=on;  # managed by Certbot
+    listen 443 ssl;  # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/kaggle.no/fullchain.pem;  # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/kaggle.no/privkey.pem;  # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;  # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;  # managed by Certbot
+}
+
+server {
+    if ($host = www.kaggle.no) {
+        return 301 https://$host$request_uri;
+    }
+
+    if ($host = kaggle.no) {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name kaggle.no www.kaggle.no;
+    return 404;
 }
