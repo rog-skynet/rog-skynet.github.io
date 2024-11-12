@@ -1,34 +1,49 @@
 <?php
-header('Content-Type: application/json');
+// Allow Cross-Origin Requests (for AJAX)
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
 
-$realName = $_POST['real-name'] ?? '';
-$gitHandle = $_POST['git-handle'] ?? '';
-$kaggleHandle = $_POST['kaggle-handle'] ?? '';
+$response = ["status" => "error", "message" => "Submission failed. Please try again."];
 
-try {
-    // Assume you have a PDO instance called $pdo
-    $pdo = new PDO('sqlite:handles.db');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if (isset($_POST['name'], $_POST['git_handle'], $_POST['kaggle_handle'])) {
+    $name = $_POST['name'];
+    $git_handle = $_POST['git_handle'];
+    $kaggle_handle = $_POST['kaggle_handle'];
 
-    // Ensure the table exists
-    $pdo->exec("CREATE TABLE IF NOT EXISTS handles (
-        id INTEGER PRIMARY KEY,
-        real_name TEXT,
-        git_handle TEXT,
-        kaggle_handle TEXT
-    )");
+    // Connect to the SQLite database
+    $db = new SQLite3('/var/www/kaggle/handles.db');
 
-    // Insert the data
-    $stmt = $pdo->prepare("INSERT INTO handles (real_name, git_handle, kaggle_handle) VALUES (:realName, :gitHandle, :kaggleHandle)");
-    $stmt->bindParam(':realName', $realName);
-    $stmt->bindParam(':gitHandle', $gitHandle);
-    $stmt->bindParam(':kaggleHandle', $kaggleHandle);
-    $stmt->execute();
+    if (!$db) {
+        $response['message'] = "Database connection failed: " . $db->lastErrorMsg();
+        echo json_encode($response);
+        exit;
+    }
 
-    // Respond with success
-    echo json_encode(['success' => true]);
-} catch (Exception $e) {
-    // Respond with failure
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    // Prepare the SQL statement
+    $stmt = $db->prepare("INSERT INTO handles (name, git_handle, kaggle_handle) VALUES (:name, :git_handle, :kaggle_handle)");
+    if (!$stmt) {
+        $response['message'] = "Failed to prepare statement: " . $db->lastErrorMsg();
+        echo json_encode($response);
+        exit;
+    }
+
+    // Bind parameters
+    $stmt->bindValue(':name', $name, SQLITE3_TEXT);
+    $stmt->bindValue(':git_handle', $git_handle, SQLITE3_TEXT);
+    $stmt->bindValue(':kaggle_handle', $kaggle_handle, SQLITE3_TEXT);
+
+    // Execute the statement and check for success
+    $result = $stmt->execute();
+    if ($result) {
+        $response['status'] = "success";
+        $response['message'] = "Submission successful!";
+    } else {
+        $response['message'] = "Database write failed: " . $db->lastErrorMsg();
+    }
+
+    // Close the database connection
+    $db->close();
 }
-?>
+
+// Return the JSON response
+echo json_encode($response);
