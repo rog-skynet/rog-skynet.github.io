@@ -56,8 +56,16 @@ $results = $database->query("SELECT * FROM handles");
                 <tr>
                     <td><?php echo htmlspecialchars($row['id']); ?></td>
                     <td><?php echo htmlspecialchars($row['name']); ?></td>
-                    <td><?php echo htmlspecialchars($row['git_handle']); ?></td>
-                    <td><?php echo htmlspecialchars($row['kaggle_handle']); ?></td>
+                    <td>
+                        <a href="https://github.com/<?php echo htmlspecialchars($row['git_handle']); ?>" target="_blank">
+                            <?php echo htmlspecialchars($row['git_handle']); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="https://www.kaggle.com/<?php echo htmlspecialchars($row['kaggle_handle']); ?>" target="_blank">
+                            <?php echo htmlspecialchars($row['kaggle_handle']); ?>
+                        </a>
+                    </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
